@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Deserialize, Serialize)]
+
+#[derive(Debug, Serialize)]
 pub struct Venta {
     pub num_factura: String,
     pub productos: Vec<ProductoVendido>,
@@ -19,7 +20,6 @@ pub struct Venta {
     pub created_at: String,
     pub updated_at: String,
 }
-
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Producto {
     pub nombre: String,
