@@ -1,13 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BaseDirectory, createDir } from "@tauri-apps/api/fs";
+import { BaseDirectory, createDir, writeFile } from "@tauri-apps/api/fs";
 
-const createDataFolder = async () => {
-  await createDir("testFolder", {
-    dir: BaseDirectory.Executable,
+const createDataFolder = async (folderName: string) => {
+  await createDir(folderName, {
+    dir: BaseDirectory.App,
     recursive: true,
   });
+};
+
+const createDataFile = async (fileName: string, contents: string) => {
+  try {
+    await writeFile(
+      {
+        contents: contents,
+        path: fileName,
+      },
+      {
+        dir: BaseDirectory.App,
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 function App() {
@@ -17,13 +33,16 @@ function App() {
   useEffect(() => {
     const CheckData = async () => {
       try {
+        const folderName = "localDatabase"
+        await createDataFolder(folderName);
+        await createDataFile(`${folderName}/productos.json`, JSON.stringify({ prod: 1, ean: "ean" }))
+
         const p1 = new Promise((resolve) => setTimeout(() => {
           resolve("p1");
         }, 5000));
 
         await p1;
         setIsLoading(false);
-        await createDataFolder()
       } catch (err) {
 
       }
