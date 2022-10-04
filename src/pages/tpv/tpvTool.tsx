@@ -77,7 +77,7 @@ const TpvTool = (props: { productos: Producto[], setShowModalCerrar: Function, s
                             </div>
                         </div>
                         {
-                            props.productos.length <= 0 ?
+                            props.productos && props.productos.length <= 0 ?
                                 <div className="flex gap-2 p-4">
                                     {
                                         arrayNum.map((n, i) => {

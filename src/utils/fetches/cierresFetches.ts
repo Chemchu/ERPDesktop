@@ -1,7 +1,6 @@
 import { Cierre } from "../../tipos/Cierre";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateCierreList } from "../typeCreator";
-import queryString from 'query-string';
 
 export const FetchCierres = async (): Promise<Cierre[]> => {
     try {
@@ -24,18 +23,19 @@ export const FetchCierres = async (): Promise<Cierre[]> => {
 
 export const FetchCierresByQuery = async (userQuery?: string, fechas?: string[]): Promise<Cierre[]> => {
     try {
-        let query: any = new Object;
-        query.query = userQuery;
-        query.fechas = fechas ? fechas : null;
-        const queryObject = queryString.stringify(query);
-        let cierresRes = [] as Cierre[];
+        // let query: any = new Object;
+        // query.query = userQuery;
+        // query.fechas = fechas ? fechas : null;
+        // const queryObject = queryString.stringify(query);
+        // let cierresRes = [] as Cierre[];
 
-        const crResponse = await fetch(`/api/cierres/${queryObject}`);
-        if (!crResponse.ok) { notifyError("Error al buscar los cierres de caja"); return []; }
+        // const crResponse = await fetch(`/api/cierres/${queryObject}`);
+        // if (!crResponse.ok) { notifyError("Error al buscar los cierres de caja"); return []; }
 
-        const crJson = await crResponse.json();
-        cierresRes = CreateCierreList(crJson.data);
-        return cierresRes;
+        // const crJson = await crResponse.json();
+        // cierresRes = CreateCierreList(crJson.data);
+        // return cierresRes;
+        return []
     }
     catch (e) {
         console.error(e);

@@ -1,7 +1,6 @@
 import { Producto } from "../../tipos/Producto";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateProductList } from "../typeCreator";
-import queryString from 'query-string';
 import { TipoProductos } from "../../tipos/Enums/TipoProductos";
 
 export const FetchProductos = async (tipoProductos?: TipoProductos): Promise<Producto[]> => {
@@ -32,27 +31,28 @@ export const FetchProductos = async (tipoProductos?: TipoProductos): Promise<Pro
 
 export const FetchProductoByQuery = async (userQuery: string, tipoProductos?: TipoProductos): Promise<Producto[]> => {
     try {
-        let prodRes = [] as Producto[];
-        let id: any = new Object;
-        id.query = userQuery.valueOf();
+        // let prodRes = [] as Producto[];
+        // let id: any = new Object;
+        // id.query = userQuery.valueOf();
 
-        const query = queryString.stringify(id);
+        // const query = queryString.stringify(id);
 
-        const pResponse = await fetch(`/api/productos/${query}`);
+        // const pResponse = await fetch(`/api/productos/${query}`);
 
-        if (!pResponse.ok) { notifyError("Error al buscar los productos"); return []; }
+        // if (!pResponse.ok) { notifyError("Error al buscar los productos"); return []; }
 
-        const pJson = await pResponse.json();
+        // const pJson = await pResponse.json();
 
-        prodRes = CreateProductList(pJson.productos);
-        if (tipoProductos === TipoProductos.Alta) {
-            return prodRes.filter((p) => { return p.alta === true });
-        }
-        if (tipoProductos === TipoProductos.Baja) {
-            return prodRes.filter((p) => { return p.alta === false });
-        }
+        // prodRes = CreateProductList(pJson.productos);
+        // if (tipoProductos === TipoProductos.Alta) {
+        //     return prodRes.filter((p) => { return p.alta === true });
+        // }
+        // if (tipoProductos === TipoProductos.Baja) {
+        //     return prodRes.filter((p) => { return p.alta === false });
+        // }
 
-        return prodRes
+        // return prodRes
+        return []
     }
     catch (e) {
         console.log(e);
