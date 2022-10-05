@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ConfigurateApp } from "../utils/checkConfig";
 
-function App() {
+function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isConfigurated, setIsConfigurated] = useState<boolean>(false);
 
@@ -40,7 +40,7 @@ function App() {
             </motion.svg>
             :
             <button className="bg-orange-500 cursor-pointer rounded-lg p-2"
-              onClick={() => { router.push('/home') }}>
+              onClick={() => { router.push('/dashboard') }}>
               Click!
             </button>
         }
@@ -49,4 +49,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

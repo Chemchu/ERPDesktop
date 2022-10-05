@@ -1,11 +1,11 @@
 import { Venta } from "../../tipos/Venta";
 import { notifyError } from "../toastify";
 import { CreateEmployee, CreateSalesList } from "../typeCreator";
+import queryString from 'query-string';
 import { CustomerPaymentInformation } from "../../tipos/CustomerPayment";
 import { ProductoVendido } from "../../tipos/ProductoVendido";
 import { SesionEmpleado } from "../../tipos/Empleado";
 import { Cliente } from "../../tipos/Cliente";
-import queryString from 'query-string';
 
 export const FetchVentas = async (): Promise<Venta[]> => {
     try {

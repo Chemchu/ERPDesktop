@@ -9,7 +9,8 @@ export const FetchResumenDiario = async (fecha: Date): Promise<Summary | undefin
         if (!crResponse.ok) { notifyError("Error al buscar el resumen diario"); return undefined; }
         const crJson = await crResponse.json();
 
-        return CreateSummary(crJson.data);
+        const summary = CreateSummary(crJson.data);
+        return summary;
     }
     catch (e) {
         console.error(e);
@@ -25,7 +26,8 @@ export const FetchResumenRango = async (fechaInicial: Date, fechaFinal: Date): P
         if (!crResponse.ok) { notifyError("Error al buscar el resumen diario"); return undefined; }
         const crJson = await crResponse.json();
 
-        return CreateSummary(crJson.data);
+        const summary = CreateSummary(crJson.data);
+        return summary;
     }
     catch (e) {
         console.error(e);

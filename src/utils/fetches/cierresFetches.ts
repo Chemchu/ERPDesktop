@@ -11,7 +11,6 @@ export const FetchCierres = async (): Promise<Cierre[]> => {
 
         if (!crResponse.ok) { notifyError("Error al buscar los cierres de caja"); return []; }
         const crJson = await crResponse.json();
-        console.log(crJson);
 
         cierresRes = CreateCierreList(crJson.data);
         return cierresRes;

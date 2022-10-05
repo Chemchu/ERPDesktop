@@ -2,8 +2,8 @@ import { SesionEmpleado } from "../../tipos/Empleado";
 import { ITPV } from "../../tipos/TPV";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateCierreList, CreateTPV, CreateTPVsList } from "../typeCreator";
-import { Cierre } from "../../tipos/Cierre";
 import queryString from 'query-string';
+import { Cierre } from "../../tipos/Cierre";
 
 export const FetchTPV = async (TPVId: string, abortController: AbortController): Promise<ITPV | undefined> => {
     if (!TPVId) { throw "ID de la TPV no puede ser undefined"; }

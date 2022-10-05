@@ -1,8 +1,8 @@
 import { Producto } from "../../tipos/Producto";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateProductList } from "../typeCreator";
-import { TipoProductos } from "../../tipos/Enums/TipoProductos";
 import queryString from 'query-string';
+import { TipoProductos } from "../../tipos/Enums/TipoProductos";
 
 export const FetchProductos = async (tipoProductos?: TipoProductos): Promise<Producto[]> => {
     try {

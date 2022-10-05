@@ -1,8 +1,8 @@
-import { AnimatePresence } from "framer-motion";
-import type { AppProps } from "next/app";
-import { Provider } from 'react-redux'
-import store from "../store";
-import "../App.css";
+import '../styles/globals.css'
+import type { AppProps } from 'next/app'
+import { AnimatePresence } from 'framer-motion'
+import React from 'react'
+import { DatosTiendaContextProvider } from '../context/datosTienda'
 
 type AppPropsConPageLayout = AppProps & {
   Component: AppProps['Component'] & {
@@ -10,20 +10,21 @@ type AppPropsConPageLayout = AppProps & {
   }
 }
 
-// This default export is required in a new `pages/_app.js` file.
-export default function MyApp({ Component, pageProps, router }: AppPropsConPageLayout) {
+function MyApp({ Component, pageProps, router }: AppPropsConPageLayout) {
   return (
-    <Provider store={store}>
-      <AnimatePresence mode="wait">
-        {
-          Component.PageLayout ?
-            <Component.PageLayout>
+    <AnimatePresence mode='wait'>
+      {
+        Component.PageLayout ?
+          <DatosTiendaContextProvider >
+            <Component.PageLayout >
               <Component {...pageProps} key={router.route} />
             </Component.PageLayout>
-            :
-            <Component {...pageProps} key={router.route} />
-        }
-      </AnimatePresence>
-    </Provider>
+          </DatosTiendaContextProvider>
+          :
+          <Component {...pageProps} key={router.route} />
+      }
+    </AnimatePresence>
   );
 }
+
+export default MyApp

@@ -1,8 +1,8 @@
+import getJwtFromString from "../../hooks/jwt";
 import { Empleado } from "../../tipos/Empleado";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateEmployee, CreateEmployeeList } from "../typeCreator";
 import queryString from 'query-string';
-import getJwtFromString from "../../hooks/jwt";
 
 export const FetchEmpleado = async (_id: string): Promise<Empleado | undefined> => {
     if (!_id) { throw "ID del empleado no puede ser undefined"; }

@@ -1,108 +1,306 @@
-import Link from "next/link";
-import { SidebarOption } from "../../enums/SidebarOptions";
+import { motion } from 'framer-motion';
+import Link from 'next/dist/client/link';
+import React from 'react';
+import { SidebarOption } from '../../tipos/Enums/SidebarOption';
+import RequireHigherAuthorization from './RequireHigherAuth';
 
-const Sidebar = (props: { IndexSeleccionado: SidebarOption, setIndex: Function }) => {
+const Sidebar = React.memo((props: { isCollapsed: boolean, setCollapsed: Function, IndexSeleccionado: SidebarOption, setIndex: React.Dispatch<React.SetStateAction<SidebarOption>> }) => {
     return (
-        <div className="flex bg-blue-600 justify-evenly w-full h-auto p-1 ">
-            <Link href="/home">
-                <div className={`text-white p-1 rounded-lg cursor-pointer`}
-                    onClick={(e) => { props.setIndex(SidebarOption.Inicio); e.stopPropagation(); }}>
-                    {
-                        props.IndexSeleccionado === SidebarOption.Inicio ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                                <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                            </svg>
+        props.isCollapsed ?
+            <CollapsedSidebar setCollapsed={props.setCollapsed} IndexSeleccionado={props.IndexSeleccionado} setIndex={props.setIndex} />
+            :
+            <OpenedSidebar setCollapsed={props.setCollapsed} IndexSeleccionado={props.IndexSeleccionado} setIndex={props.setIndex} />
+    );
+})
 
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                            </svg>
+const OpenedSidebar = (props: { setCollapsed: Function, IndexSeleccionado: SidebarOption, setIndex: Function }) => {
 
-                    }
+    return (
+        <motion.div initial={{ x: "-10vh", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-10vh", opacity: 0 }}
+            className='h-screen p-2'>
+            <div className="flex flex-col w-full h-full justify-between bg-white border shadow-lg rounded-3xl">
+
+                <div className="flex justify-center items-end gap-2 w-full h-1/6 cursor-pointer" onClick={() => { props.setCollapsed(true); }}>
+                    <span className="text-gray-600 dark:text-gray-300 hover:text-blue-500 text-2xl font-bold">
+                        ERPDesktop
+                    </span>
                 </div>
-            </Link >
 
-            <Link href="/tpv">
-                <div className={`text-white p-1 rounded-lg cursor-pointer`}
-                    onClick={(e) => { props.setIndex(SidebarOption.TPV); e.stopPropagation() }}>
-                    {
-                        props.IndexSeleccionado === SidebarOption.TPV ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+                <div className="flex flex-col w-full h-full xl:gap-6 gap-4  justify-center items-stretch px-6">
+                    <Link href="/dashboard">
+                        <div className={`${props.IndexSeleccionado === SidebarOption.Inicio && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} onClick={(e) => { props.setIndex(SidebarOption.Inicio); e.stopPropagation(); }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                            </svg>
-                    }
-                </div>
-            </Link>
+                            <span>
+                                Inicio
+                            </span>
+                        </div>
+                    </Link>
 
-            <Link href="/productos">
-                <div onClick={(e) => { props.setIndex(SidebarOption.Productos); e.stopPropagation() }} className={` text-white p-1 rounded-lg cursor-pointer`}>
-                    {
-                        props.IndexSeleccionado === SidebarOption.Productos ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
+                    <Link href="/dashboard/pos" >
+                        <div onClick={(e) => { props.setIndex(SidebarOption.TPV); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.TPV && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
+                            <span>
+                                TPV
+                            </span>
+                        </div>
+                    </Link>
 
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 xl:w-10 xl:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <Link href="/dashboard/productos">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Productos); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Productos && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
-                    }
-                </div>
-            </Link>
+                            <span>
+                                Productos
+                            </span>
+                        </div>
+                    </Link>
 
-            <Link href="/ventas">
-                <div onClick={(e) => { props.setIndex(SidebarOption.Ventas); e.stopPropagation() }} className={`text-white p-1 rounded-lg cursor-pointer`} >
-                    {
-                        props.IndexSeleccionado === SidebarOption.Ventas ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path fillRule="evenodd" d="M4.125 3C3.089 3 2.25 3.84 2.25 4.875V18a3 3 0 003 3h15a3 3 0 01-3-3V4.875C17.25 3.839 16.41 3 15.375 3H4.125zM12 9.75a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5H12zm-.75-2.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5H12a.75.75 0 01-.75-.75zM6 12.75a.75.75 0 000 1.5h7.5a.75.75 0 000-1.5H6zm-.75 3.75a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5H6a.75.75 0 01-.75-.75zM6 6.75a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h3a.75.75 0 00.75-.75v-3A.75.75 0 009 6.75H6z" clipRule="evenodd" />
-                                <path d="M18.75 6.75h1.875c.621 0 1.125.504 1.125 1.125V18a1.5 1.5 0 01-3 0V6.75z" />
-                            </svg>
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 xl:w-10 xl:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/estadisticas">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Estadisticas); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Estadisticas && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                                </svg>
+                                <span>
+                                    Estadísticas
+                                </span>
+
+                            </div>
+                        </Link>
+                    </RequireHigherAuthorization>
+
+                    <Link href="/dashboard/ventas">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Ventas); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Ventas && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                             </svg>
-                    }
-                </div>
-            </Link >
+                            <span>
+                                Ventas
+                            </span>
 
-            <Link href="/cierres">
-                <div onClick={(e) => { props.setIndex(SidebarOption.Cierres); e.stopPropagation() }} className={`text-white p-1 rounded-lg cursor-pointer`} >
-                    {
-                        props.IndexSeleccionado === SidebarOption.Cierres ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
-                            </svg>
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 xl:w-10 xl:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        </div>
+                    </Link>
+
+                    <Link href="/dashboard/cierres">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Cierres); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Cierres && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
-                    }
-                </div>
-            </Link>
+                            <span>
+                                Cierres
+                            </span>
 
-            <Link href="/clientes">
-                <div onClick={(e) => { props.setIndex(SidebarOption.Clientes); e.stopPropagation() }} className={`text-white p-1 rounded-lg cursor-pointer`} >
-                    {
-                        props.IndexSeleccionado === SidebarOption.Clientes ?
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
-                            </svg>
-                            :
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 xl:w-10 xl:h-10">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                            </svg>
-                    }
-                </div>
-            </Link>
+                        </div>
+                    </Link>
 
-        </div >
-    )
+                    <Link href="/dashboard/clientes">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Clientes); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Clientes && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>
+                                Clientes
+                            </span>
+
+                        </div>
+                    </Link>
+
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/empleados">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Empleados); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Empleados && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <span>
+                                    Empleados
+                                </span>
+
+                            </div>
+                        </Link>
+                    </RequireHigherAuthorization>
+
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/proveedores">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Proveedores); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Proveedores && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                </svg>
+                                <span>
+                                    Proveedores
+                                </span>
+
+                            </div>
+                        </Link>
+                    </RequireHigherAuthorization>
+                </div>
+
+                <div className='flex flex-col w-full h-1/6 xl:gap-6 gap-4  justify-center px-5 pb-10'>
+                    <Link href="/dashboard/configuracion">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Ajustes); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Ajustes && "bg-gray-100 text-blue-500"} 
+                        hover:text-blue-500 hover:bg-gray-100 flex gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>
+                                Ajustes
+                            </span>
+                        </div>
+                    </Link>
+
+                    <Link href="/">
+                        <div onClick={async (e) => { props.setIndex(SidebarOption.Ajustes); e.stopPropagation(); await fetch('/api/logout') }} className={`${props.IndexSeleccionado === SidebarOption.Salir && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 gap-4 flex items-center transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span >
+                                Salir
+                            </span>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+        </motion.div >
+    );
 }
 
+const CollapsedSidebar = (props: { setCollapsed: Function, IndexSeleccionado: SidebarOption, setIndex: Function }) => {
+    return (
+        <motion.div initial={{ x: "-10vh", opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: "-10vh", opacity: 0 }}
+            className='w-auto h-screen p-2'>
+            <div className="flex flex-col h-full justify-between bg-white border shadow-lg rounded-3xl">
+                <div className="flex justify-center items-end w-full h-1/6 cursor-pointer hover:text-blue-500" onClick={() => { props.setCollapsed(false); }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </div>
+
+                <div className="flex flex-col w-full h-full xl:gap-6 gap-4 justify-center items-stretch px-5 ">
+                    <Link href="/dashboard">
+                        <div className={`${props.IndexSeleccionado === SidebarOption.Inicio && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `}
+                            onClick={(e) => { props.setIndex(SidebarOption.Inicio); e.stopPropagation(); }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <Link href="/dashboard/pos">
+                        <div className={`${props.IndexSeleccionado === SidebarOption.TPV && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `}
+                            onClick={(e) => { props.setIndex(SidebarOption.TPV); e.stopPropagation() }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <Link href="/dashboard/productos">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Productos); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Productos && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/estadisticas">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Estadisticas); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Estadisticas && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                                </svg>
+                            </div>
+
+                        </Link>
+                    </RequireHigherAuthorization>
+
+                    <Link href="/dashboard/ventas">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Ventas); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Ventas && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <Link href="/dashboard/cierres">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Cierres); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Cierres && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <Link href="/dashboard/clientes">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Clientes); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Clientes && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/empleados">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Empleados); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Empleados && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                        </Link>
+                    </RequireHigherAuthorization>
+
+                    <RequireHigherAuthorization>
+                        <Link href="/dashboard/proveedores">
+                            <div onClick={(e) => { props.setIndex(SidebarOption.Proveedores); e.stopPropagation(); }} className={`${props.IndexSeleccionado === SidebarOption.Proveedores && "bg-gray-100 text-blue-500"} hover:text-blue-500 hover:bg-gray-100 flex items-center gap-4 transition-colors dark:hover:text-white dark:hover:bg-gray-600 duration-200
+                        text-gray-600 dark:text-gray-400 rounded-lg cursor-pointer`} >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                </svg>
+                            </div>
+                        </Link>
+                    </RequireHigherAuthorization>
+
+                </div>
+
+                <div className='flex flex-col w-full h-1/6 xl:gap-6 gap-4 justify-center px-5 pb-10'>
+                    <Link href="/dashboard/configuracion">
+                        <div onClick={(e) => { props.setIndex(SidebarOption.Ajustes); e.stopPropagation() }} className={`${props.IndexSeleccionado === SidebarOption.Ajustes && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                    </Link>
+
+                    <Link href="/">
+                        <div onClick={async (e) => { props.setIndex(SidebarOption.Salir); e.stopPropagation(); await fetch('/api/logout'); }} className={`${props.IndexSeleccionado === SidebarOption.Salir && "bg-gray-100 text-blue-500"} hover:text-gray-800 hover:bg-gray-100 cursor-pointer dark:hover:text-white dark:hover:bg-gray-600 duration-200 text-gray-600 dark:text-gray-400 rounded-lg `} >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 hover:stroke-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+        </motion.div >
+    );
+}
+
+Sidebar.displayName = 'Sidebar';
 export default Sidebar;
