@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { FetchCierres } from "./fetches/cierresFetches";
 import { FetchClientes } from "./fetches/clienteFetches";
 import { FetchProductos } from "./fetches/productosFetches";
@@ -10,26 +11,41 @@ const ventasPath = `${folderName}/ventas.json`
 const clientesPath = `${folderName}/clientes.json`
 const cierresPath = `${folderName}/cierres.json`
 
-export const ConfigurateApp = async () => {
+export const ConfigurateApp = async (setStep?: Dispatch<SetStateAction<string>>): Promise<{ message: string, successful: boolean }> => {
+    setStep("Comprobando la conexión a internet...");
     await createDataFolder(folderName);
+    const hasNetwork = await CheckInternetConnection();
 
-    if (!await fileExists(productosPath)) {
-        const productos = await FetchProductos();
+    if (!hasNetwork) { return { message: "El ordenador no tiene conexión a internet o el servidor no está disponible", successful: false } }
+
+    setStep("Actualizando el registro de productos...");
+    const productos = await FetchProductos();
+    if (productos.length > 0) {
         await createDataFile(productosPath, JSON.stringify(productos))
     }
 
-    if (!await fileExists(ventasPath)) {
-        const ventas = await FetchVentas()
+    setStep("Actualizando el registro de ventas...");
+    const ventas = await FetchVentas()
+    if (ventas.length > 0) {
         await createDataFile(ventasPath, JSON.stringify(ventas))
     }
 
-    if (!await fileExists(clientesPath)) {
-        const clientes = await FetchClientes()
+    setStep("Actualizando el registro de clientes...");
+    const clientes = await FetchClientes()
+    if (clientes.length > 0) {
         await createDataFile(clientesPath, JSON.stringify(clientes))
     }
 
-    if (!await fileExists(cierresPath)) {
-        const cierres = await FetchCierres()
+    setStep("Actualizando el registro de cierres...");
+    const cierres = await FetchCierres()
+    if (cierres.length > 0) {
         await createDataFile(cierresPath, JSON.stringify(cierres))
     }
+
+    return { message: "Datos actualizados correctamente", successful: true }
+}
+
+const CheckInternetConnection = async (): Promise<boolean> => {
+    const res = await fetch(`/api/status`);
+    return (await res.json()).isOnline
 }

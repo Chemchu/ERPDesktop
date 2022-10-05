@@ -98,7 +98,7 @@ export const LoginForm = () => {
                     <div className="px-5 py-7">
                         <motion.h1 className="font-bold text-center text-2xl mb-5" variants={item}>
                             <SplitLetters initial={{ y: '100%', rotate: 90, }} animate="visible" variants={{ visible: (i: number) => ({ rotate: 0, y: 0, transition: { delay: (2.8) + (i * 0.1) } }) }}>
-                                ERPWeb
+                                ERPDesktop
                             </SplitLetters>
                         </motion.h1>
 
@@ -107,7 +107,7 @@ export const LoginForm = () => {
                                 <label className="font-semibold text-sm text-black pb-1 block">Dirección de correo</label>
                                 <input name="email" type="text"
                                     onChange={(e) => { SetEmail(e.target.value); setLoginFallido(false); }}
-                                    onKeyPress={(e) => { if (e.key === "Enter") { Authenticate(email, password); } }}
+                                    onKeyDown={(e) => { if (e.key === "Enter") { Authenticate(email, password); } }}
                                     className={`border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full ${loginFallido ? `outline-red-500 border-red-500 border-2` : `outline-blue-500`} `} />
                             </motion.div>
 
@@ -115,7 +115,7 @@ export const LoginForm = () => {
                                 <label className="font-semibold text-sm text-black pb-1 block">Contraseña</label>
                                 <input name="password" type="password"
                                     onChange={(e) => { SetPassword(e.target.value); setLoginFallido(false); }}
-                                    onKeyPress={(e) => { if (e.key === "Enter") { Authenticate(email, password); } }}
+                                    onKeyDown={(e) => { if (e.key === "Enter") { Authenticate(email, password); } }}
                                     className={`border border-gray-400 rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full ${loginFallido ? `outline-red-500 border-red-500 border-2` : `outline-blue-500`} `} />
                             </motion.div>
 
@@ -140,26 +140,6 @@ export const LoginForm = () => {
                                     <path strokeLinecap="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
                             </button>
-                        </motion.div>
-                    </div>
-                    <div className="py-3">
-                        <motion.div className="grid grid-cols-2 gap-1" variants={item}>
-                            <div className="text-center sm:text-left whitespace-nowrap">
-                                <button className="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 inline-block align-text-top">
-                                        <path strokeLinecap="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                    </svg>
-                                    <span className="inline-block ml-1">He olvidado mi contraseña</span>
-                                </button>
-                            </div>
-                            <div className="text-center sm:text-right whitespace-nowrap">
-                                <button className="transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 inline-block align-text-bottom	">
-                                        <path strokeLinecap="round" strokeWidth="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span className="inline-block ml-1">Ayuda</span>
-                                </button>
-                            </div>
                         </motion.div>
                     </div>
                 </motion.div>
