@@ -1,6 +1,7 @@
 import { Cliente } from "../../tipos/Cliente";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateClientList } from "../typeCreator";
+import queryString from 'query-string';
 
 export const FetchClientes = async (): Promise<Cliente[]> => {
     try {
@@ -23,20 +24,19 @@ export const FetchClientes = async (): Promise<Cliente[]> => {
 
 export const FetchClientesByQuery = async (userQuery: string): Promise<Cliente[]> => {
     try {
-        // let id: any = new Object;
-        // id.query = userQuery.valueOf();
+        let id: any = new Object;
+        id.query = userQuery.valueOf();
 
-        // const query = queryString.stringify(id);
-        // const cResponse = await fetch(`/api/clientes/${query}`);
+        const query = queryString.stringify(id);
+        const cResponse = await fetch(`/api/clientes/${query}`);
 
-        // if (!cResponse.ok) {
-        //     notifyError("Error al buscar los clientes");
-        //     return [];
-        // }
-        // const cJson = await cResponse.json();
+        if (!cResponse.ok) {
+            notifyError("Error al buscar los clientes");
+            return [];
+        }
+        const cJson = await cResponse.json();
 
-        // return CreateClientList(cJson.data);
-        return []
+        return CreateClientList(cJson.data);
     }
     catch (e) {
         console.error(e);

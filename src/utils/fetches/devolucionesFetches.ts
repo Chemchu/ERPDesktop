@@ -4,6 +4,7 @@ import { ProductoDevuelto } from "../../tipos/ProductoDevuelto";
 import { Venta } from "../../tipos/Venta";
 import { notifyError } from "../toastify";
 import { CreateDevolucionList } from "../typeCreator";
+import queryString from 'query-string';
 
 export const FetchDevoluciones = async (): Promise<Devolucion[]> => {
     try {
@@ -27,20 +28,19 @@ export const FetchDevoluciones = async (): Promise<Devolucion[]> => {
 
 export const FetchDevolucionesByQuery = async (userQuery: string): Promise<Devolucion[]> => {
     try {
-        // let query: any = new Object;
-        // query.query = userQuery;
-        // const queryObject = queryString.stringify(query);
+        let query: any = new Object;
+        query.query = userQuery;
+        const queryObject = queryString.stringify(query);
 
-        // const vRes = await fetch(`/api/devoluciones/${queryObject}`);
+        const vRes = await fetch(`/api/devoluciones/${queryObject}`);
 
-        // if (!vRes.ok) {
-        //     notifyError("Error al buscar las devoluciones");
-        //     return [];
-        // }
+        if (!vRes.ok) {
+            notifyError("Error al buscar las devoluciones");
+            return [];
+        }
 
-        // const devoluciones = await vRes.json();
-        // return CreateDevolucionList(devoluciones.data);
-        return []
+        const devoluciones = await vRes.json();
+        return CreateDevolucionList(devoluciones.data);
     }
     catch (e) {
         console.error(e);
@@ -51,25 +51,24 @@ export const FetchDevolucionesByQuery = async (userQuery: string): Promise<Devol
 
 export const FetchDevolucionesByDateRange = async (fechaIni: Date, fechaFin: Date): Promise<Devolucion[]> => {
     try {
-        // let fechas: any = new Object;
-        // fechas.fechaInicial = fechaIni.valueOf();
-        // fechas.fechaFinal = fechaFin.valueOf();
+        let fechas: any = new Object;
+        fechas.fechaInicial = fechaIni.valueOf();
+        fechas.fechaFinal = fechaFin.valueOf();
 
-        // const f = queryString.stringify(fechas);
+        const f = queryString.stringify(fechas);
 
-        // const vRes = await fetch(`/api/devoluciones/${f}`, {
-        //     headers: { 'Content-type': 'application/json' },
-        //     method: 'GET',
-        // });
+        const vRes = await fetch(`/api/devoluciones/${f}`, {
+            headers: { 'Content-type': 'application/json' },
+            method: 'GET',
+        });
 
-        // if (!vRes.ok) {
-        //     notifyError("Error al buscar las devoluciones");
-        //     return [];
-        // }
+        if (!vRes.ok) {
+            notifyError("Error al buscar las devoluciones");
+            return [];
+        }
 
-        // const devoluciones = await vRes.json();
-        // return CreateDevolucionList(devoluciones.data);
-        return []
+        const devoluciones = await vRes.json();
+        return CreateDevolucionList(devoluciones.data);
     }
     catch (e) {
         console.error(e);

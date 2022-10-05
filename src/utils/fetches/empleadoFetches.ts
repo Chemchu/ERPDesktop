@@ -1,6 +1,8 @@
 import { Empleado } from "../../tipos/Empleado";
 import { notifyError, notifySuccess } from "../toastify";
 import { CreateEmployee, CreateEmployeeList } from "../typeCreator";
+import queryString from 'query-string';
+import getJwtFromString from "../../hooks/jwt";
 
 export const FetchEmpleado = async (_id: string): Promise<Empleado | undefined> => {
     if (!_id) { throw "ID del empleado no puede ser undefined"; }
@@ -61,46 +63,46 @@ export const UpdateEmpleado = async (empleado: Empleado): Promise<{ message: str
     }
 }
 
-// export const FetchCurrentUser = async (): Promise<Empleado> => {
-//     try {
-//         const fetchRes = await fetch(`/api/currentUserToken`);
-//         const empleadoJson = await fetchRes.json();
+export const FetchCurrentUser = async (): Promise<Empleado> => {
+    try {
+        const fetchRes = await fetch(`/api/currentUserToken`);
+        const empleadoJson = await fetchRes.json();
 
-//         if (!fetchRes.ok) { notifyError(empleadoJson.message); return {} as Empleado; }
+        if (!fetchRes.ok) { notifyError(empleadoJson.message); return {} as Empleado; }
 
-//         const [empJwt, isCookieValid] = getJwtFromString(empleadoJson.token);
-//         if (!isCookieValid) { return {} as Empleado } // --> Puede causar bug
+        const [empJwt, isCookieValid] = getJwtFromString(empleadoJson.token);
+        if (!isCookieValid) { return {} as Empleado } // --> Puede causar bug
 
-//         return CreateEmployee(empJwt);
-//     }
-//     catch (e) {
-//         console.error(e);
-//         notifyError("Error de conexión");
+        return CreateEmployee(empJwt);
+    }
+    catch (e) {
+        console.error(e);
+        notifyError("Error de conexión");
 
-//         return {} as Empleado;
-//     }
-// }
+        return {} as Empleado;
+    }
+}
 
-// export const FetchEmpleadosByQuery = async (userQuery: string): Promise<Empleado[]> => {
-//     try {
-//         let id: any = new Object;
-//         id.query = userQuery.valueOf();
+export const FetchEmpleadosByQuery = async (userQuery: string): Promise<Empleado[]> => {
+    try {
+        let id: any = new Object;
+        id.query = userQuery.valueOf();
 
-//         const query = queryString.stringify(id);
+        const query = queryString.stringify(id);
 
-//         const pResponse = await fetch(`/api/empleados/${query}`);
+        const pResponse = await fetch(`/api/empleados/${query}`);
 
-//         if (!pResponse.ok) { notifyError("Error al buscar los empleados"); return []; }
+        if (!pResponse.ok) { notifyError("Error al buscar los empleados"); return []; }
 
-//         const pJson = await pResponse.json();
-//         return CreateEmployeeList(pJson.data);
-//     }
-//     catch (e) {
-//         console.log(e);
-//         notifyError("Error de conexión");
-//         return [];
-//     }
-// }
+        const pJson = await pResponse.json();
+        return CreateEmployeeList(pJson.data);
+    }
+    catch (e) {
+        console.log(e);
+        notifyError("Error de conexión");
+        return [];
+    }
+}
 
 export const AddNewEmpleado = async (empleado: Empleado): Promise<{ message: string, successful: boolean }> => {
     try {

@@ -5,6 +5,7 @@ import { CustomerPaymentInformation } from "../../tipos/CustomerPayment";
 import { ProductoVendido } from "../../tipos/ProductoVendido";
 import { SesionEmpleado } from "../../tipos/Empleado";
 import { Cliente } from "../../tipos/Cliente";
+import queryString from 'query-string';
 
 export const FetchVentas = async (): Promise<Venta[]> => {
     try {
@@ -27,15 +28,14 @@ export const FetchVentas = async (): Promise<Venta[]> => {
 
 export const FetchVentaByQuery = async (userQuery: string, fechas?: string[]): Promise<Venta[]> => {
     try {
-        // let query: any = new Object;
-        // query.query = userQuery;
-        // query.fechas = fechas ? fechas : null;
-        // const queryObject = queryString.stringify(query);
+        let query: any = new Object;
+        query.query = userQuery;
+        query.fechas = fechas ? fechas : null;
+        const queryObject = queryString.stringify(query);
 
-        // const vRes = await fetch(`/api/ventas/${queryObject}`);
-        // const resJson = await vRes.json();
-        // return CreateSalesList(resJson.data);
-        return []
+        const vRes = await fetch(`/api/ventas/${queryObject}`);
+        const resJson = await vRes.json();
+        return CreateSalesList(resJson.data);
     }
     catch (e) {
         console.error(e);
@@ -46,25 +46,24 @@ export const FetchVentaByQuery = async (userQuery: string, fechas?: string[]): P
 
 export const FetchVentasByDateRange = async (fechaIni: Date, fechaFin: Date): Promise<Venta[]> => {
     try {
-        // let fechas: any = new Object;
-        // fechas.fechaInicial = fechaIni.valueOf();
-        // fechas.fechaFinal = fechaFin.valueOf();
+        let fechas: any = new Object;
+        fechas.fechaInicial = fechaIni.valueOf();
+        fechas.fechaFinal = fechaFin.valueOf();
 
-        // const f = queryString.stringify(fechas);
+        const f = queryString.stringify(fechas);
 
-        // const vRes = await fetch(`/api/ventas/${f}`, {
-        //     headers: { 'Content-type': 'application/json' },
-        //     method: 'GET',
-        // });
+        const vRes = await fetch(`/api/ventas/${f}`, {
+            headers: { 'Content-type': 'application/json' },
+            method: 'GET',
+        });
 
-        // if (!vRes.ok) {
-        //     notifyError("Error al buscar las ventas");
-        //     return [];
-        // }
+        if (!vRes.ok) {
+            notifyError("Error al buscar las ventas");
+            return [];
+        }
 
-        // const ventas = await vRes.json();
-        // return CreateSalesList(ventas.data);
-        return []
+        const ventas = await vRes.json();
+        return CreateSalesList(ventas.data);
     }
     catch (e) {
         console.error(e);
