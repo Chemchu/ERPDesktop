@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ConfigurateApp } from "../utils/checkConfig";
 
-
-
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isConfigurated, setIsConfigurated] = useState<boolean>(false);
