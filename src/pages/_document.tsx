@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Titlebar from '../components/titlebar';
 
 class MyDocument extends Document {
     render() {
@@ -10,7 +11,10 @@ class MyDocument extends Document {
                     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
                     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Public+Sans&display=swap" rel="stylesheet" />
                 </Head>
-                <body>
+                <body
+                // className='overflow-hidden rounded-lg'
+                >
+                    {/* <Titlebar /> */}
                     <Main />
                     <NextScript />
                 </body>

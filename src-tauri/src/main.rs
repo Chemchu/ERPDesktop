@@ -5,10 +5,8 @@
 
 use std::fs;
 
-mod modelos;
-
 #[tauri::command]
-fn save_file(path: String, contents: String) -> bool {
+fn minimize_screen(path: String, contents: String) -> bool {
     let result = fs::write(path, contents);
 
     match result {
@@ -19,7 +17,7 @@ fn save_file(path: String, contents: String) -> bool {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![save_file])
+        .invoke_handler(tauri::generate_handler![minimize_screen])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
