@@ -9,7 +9,7 @@ import { EmpleadoContextProvider } from "../context/empleadoContext";
 import { ToastContainer } from "react-toastify";
 import { SidebarOption } from "../tipos/Enums/SidebarOption";
 import { ComprasAparcadasContextProvider } from "../context/comprasAparcadas";
-import useDatosTiendaContext, { DatosTiendaContextProvider } from "../context/datosTienda";
+import useDatosTiendaContext from "../context/datosTienda";
 import Cookies from 'js-cookie'
 import { notifyInfo } from "../utils/toastify";
 import StoreDataModal from "../components/modal/storeDataModal";
@@ -88,5 +88,6 @@ const DashboardLayout = React.memo(({ children }: { children: React.ReactNode })
         </EmpleadoContextProvider>
     );
 });
+DashboardLayout.displayName = "Layout"
 
 export default DashboardLayout;
